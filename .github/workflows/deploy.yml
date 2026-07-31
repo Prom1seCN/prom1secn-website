@@ -24,14 +24,12 @@ jobs:
         run: npm run build
 
       - name: Deploy to server
-        uses: easingthemes/ssh-deploy@v5
-        with:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_KEY }}
-          REMOTE_HOST: ${{ secrets.SSH_HOST }}
-          REMOTE_USER: ${{ secrets.SSH_USER }}
-          SOURCE: "dist/"
-          TARGET: "/home/ubuntu/prom1secn/dist/"
-          ARGS: "-avz --delete"
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+          rsync -avz --delete dist/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/ubuntu/prom1secn/dist/
 
       - name: Restart service
         uses: appleboy/ssh-action@v1
