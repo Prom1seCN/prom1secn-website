@@ -9,6 +9,11 @@ const tagColors: Record<string, { bg: string; border: string; text: string }> = 
   '微信小程序': { bg: 'rgba(7,193,96,0.08)',    border: 'rgba(7,193,96,0.25)',    text: '#07c160' },
   'pm2':        { bg: 'rgba(155,89,182,0.08)',  border: 'rgba(155,89,182,0.25)',  text: '#9b59b6' },
   'Nginx':     { bg: 'rgba(0,150,57,0.08)',    border: 'rgba(0,150,57,0.25)',    text: '#009639' },
+  'Astro':      { bg: 'rgba(255,93,1,0.08)',    border: 'rgba(255,93,1,0.25)',    text: '#ff5d01' },
+  'React':      { bg: 'rgba(97,218,251,0.08)',  border: 'rgba(97,218,251,0.25)',  text: '#61dafb' },
+  'Tailwind':   { bg: 'rgba(56,189,248,0.08)',  border: 'rgba(56,189,248,0.25)',  text: '#38bdf8' },
+  'SSR':        { bg: 'rgba(249,115,22,0.08)',  border: 'rgba(249,115,22,0.25)',  text: '#f97316' },
+  'KaTeX':      { bg: 'rgba(61,97,161,0.08)',   border: 'rgba(61,97,161,0.25)',   text: '#3d61a1' },
 };
 ---
 
@@ -19,8 +24,31 @@ const tagColors: Record<string, { bg: string; border: string; text: string }> = 
     <h1 class="page-title">项目</h1>
     <p class="page-desc">我构建和正在构建的东西</p>
 
-    <a href="https://github.com/Prom1seCN/BHTX-baihuatongxing" target="_blank" rel="noopener noreferrer" style="text-decoration: none; display: block;">
+    <a href="https://github.com/Prom1seCN/prom1secn-website" target="_blank" rel="noopener noreferrer" style="text-decoration: none; display: block;">
     <article style="margin-top: 2.5rem; border: 1px solid var(--border); border-radius: 0.875rem; padding: 1.5rem; transition: border-color 0.2s ease, box-shadow 0.3s ease;" onmouseover="this.style.borderColor='#f97316'; this.style.boxShadow='0 2px 16px rgba(249,115,22,0.08)'" onmouseout="this.style.borderColor='var(--border)'; this.style.boxShadow='none'">
+      <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.875rem;">
+        <img src="/favicon.png" alt="Prom1seCN" style="width: 48px; height: 48px; border-radius: 0.625rem; object-fit: cover; flex-shrink: 0; border: 1px solid var(--border);" />
+        <div style="flex: 1; min-width: 0;">
+          <div style="display: flex; align-items: center; gap: 0.625rem;">
+            <h2 style="margin: 0; font-family: ui-monospace, monospace; font-size: 1.125rem; font-weight: 500; color: var(--text);">个人网站</h2>
+            <span style="border-radius: 9999px; border: 1px solid rgba(249,115,22,0.25); background: rgba(249,115,22,0.06); padding: 0.1875rem 0.5rem; font-family: ui-monospace, monospace; font-size: 0.625rem; color: #f97316; line-height: 1;">live</span>
+          </div>
+          <p style="margin: 0.375rem 0 0; font-size: 0.875rem; color: var(--text2);">个人网站 + 全自动博客</p>
+        </div>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 0.375rem;">
+        {['Astro', 'React', 'Tailwind', 'SSR', 'KaTeX', 'pm2', 'Nginx'].map(tag => {
+          const c = tagColors[tag]!;
+          return (
+            <span class="tag-badge" style={`border-radius:0.25rem;border:1px solid ${c.border};background:${c.bg};padding:0.1875rem 0.5rem;font-family:ui-monospace,monospace;font-size:0.6875rem;color:${c.text};letter-spacing:0.02em;cursor:default`}>{tag}</span>
+          );
+        })}
+      </div>
+    </article>
+    </a>
+
+    <a href="https://github.com/Prom1seCN/BHTX-baihuatongxing" target="_blank" rel="noopener noreferrer" style="text-decoration: none; display: block;">
+    <article style="margin-top: 1rem; border: 1px solid var(--border); border-radius: 0.875rem; padding: 1.5rem; transition: border-color 0.2s ease, box-shadow 0.3s ease;" onmouseover="this.style.borderColor='#f97316'; this.style.boxShadow='0 2px 16px rgba(249,115,22,0.08)'" onmouseout="this.style.borderColor='var(--border)'; this.style.boxShadow='none'">
       <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.875rem;">
         <img src="/bhtx.png" alt="百花同行" style="width: 48px; height: 48px; border-radius: 0.625rem; object-fit: cover; flex-shrink: 0; border: 1px solid var(--border);" />
         <div style="flex: 1; min-width: 0;">
@@ -31,16 +59,20 @@ const tagColors: Record<string, { bg: string; border: string; text: string }> = 
           <p style="margin: 0.375rem 0 0; font-size: 0.875rem; color: var(--text2);">一款为 BUCT 同学设计的拼车小程序。</p>
         </div>
       </div>
-
       <div style="display: flex; flex-wrap: wrap; gap: 0.375rem;">
         {['Node.js', 'Express', 'MongoDB', '微信小程序', 'pm2', 'Nginx'].map(tag => {
           const c = tagColors[tag]!;
           return (
-            <span style={`border-radius:0.25rem;border:1px solid ${c.border};background:${c.bg};padding:0.1875rem 0.5rem;font-family:ui-monospace,monospace;font-size:0.6875rem;color:${c.text};letter-spacing:0.02em`}>{tag}</span>
+            <span class="tag-badge" style={`border-radius:0.25rem;border:1px solid ${c.border};background:${c.bg};padding:0.1875rem 0.5rem;font-family:ui-monospace,monospace;font-size:0.6875rem;color:${c.text};letter-spacing:0.02em;cursor:default`}>{tag}</span>
           );
         })}
       </div>
     </article>
     </a>
   </section>
+
+  <style>
+    .tag-badge { transition: all 0.2s ease; }
+    .tag-badge:hover { transform: translateY(-2px); box-shadow: 0 2px 8px currentColor; opacity: 0.85; }
+  </style>
 </BaseLayout>
