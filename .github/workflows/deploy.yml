@@ -38,4 +38,4 @@ jobs:
 
       - name: Restart service
         run: |
-          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'cd /home/ubuntu/prom1secn && npm install --production && pm2 restart prom1se'
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'export PATH=/home/ubuntu/.nvm/versions/node/v20.20.2/bin:$PATH && cd /home/ubuntu/prom1secn && npm install --production && pm2 restart prom1se'
