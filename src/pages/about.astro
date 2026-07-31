@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SocialIcons from '../components/SocialIcons';
+import ScrollReveal from '../components/ScrollReveal';
+---
+
+<BaseLayout lang="zh" title="关于">
+  <ScrollReveal client:load />
+
+  <section class="hero fade-in-section">
+    <h1 class="page-title">关于</h1>
+
+    <div style="margin-top: 2rem; max-width: 32rem; line-height: 2.2;">
+      <p style="font-family: ui-monospace, monospace; font-size: 1.25rem; font-weight: 500; color: var(--text);">
+        Prom1seCN
+      </p>
+      <p style="font-family: ui-monospace, monospace; font-size: 0.875rem; color: var(--text2);">
+        独立开发 · 自媒体 · 健身
+      </p>
+
+      <div style="margin-top: 1.5rem; font-family: ui-monospace, monospace; font-size: 0.875rem; color: var(--text2); line-height: 2;">
+        <p>BUCT · 北京化工大学</p>
+        <p>IMIS · 信息管理与信息系统</p>
+      </div>
+    </div>
+
+    <div style="margin-top: 3rem;">
+      <h2 class="section-title" style="margin-bottom: 1rem;">联系方式</h2>
+      <SocialIcons client:load />
+    </div>
+  </section>
+</BaseLayout>

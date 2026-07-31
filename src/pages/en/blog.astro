@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ScrollReveal from '../../components/ScrollReveal';
+---
+
+<BaseLayout lang="en" title="Blog">
+  <ScrollReveal client:load />
+
+  <section class="hero fade-in-section">
+    <h1 class="page-title">Blog</h1>
+    <p class="page-desc">Records and reflections from life</p>
+
+    <div class="empty-state" style="margin-top: 2.5rem;">
+      <p>No posts yet.</p>
+    </div>
+  </section>
+</BaseLayout>

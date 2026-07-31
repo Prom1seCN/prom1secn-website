@@ -1,0 +1,55 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SocialIcons from '../components/SocialIcons';
+import ScrollReveal from '../components/ScrollReveal';
+---
+
+<BaseLayout lang="zh" title="PROM1SE">
+  <ScrollReveal client:load />
+
+  <section class="hero fade-in-section">
+    <p class="hero-greeting">Hi, I'm</p>
+    <img src="/logo.png" alt="Prom1seCN" class="hero-logo" />
+    <p class="hero-tagline">生活的意义在于最大化体验</p>
+    <p class="hero-identities">独立开发 · 自媒体 · 健身</p>
+
+    <div class="hero-social">
+      <SocialIcons client:load />
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <section class="section fade-in-section">
+    <div class="section-header">
+      <span class="section-dot"></span>
+      <h2 class="section-title">项目</h2>
+      <a href="/projects" class="section-link">查看全部 &rarr;</a>
+    </div>
+    <a href="https://github.com/Prom1seCN/BHTX-baihuatongxing" target="_blank" rel="noopener noreferrer" style="text-decoration: none; display: block;">
+    <div style="margin-top: 1rem; border: 1px solid var(--border); border-radius: 0.75rem; padding: 1.125rem; transition: border-color 0.2s ease, box-shadow 0.3s ease;" onmouseover="this.style.borderColor='#f97316'; this.style.boxShadow='0 2px 12px rgba(249,115,22,0.06)'" onmouseout="this.style.borderColor='var(--border)'; this.style.boxShadow='none'">
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <img src="/bhtx.png" alt="百花同行" style="width: 40px; height: 40px; border-radius: 0.5rem; object-fit: cover; flex-shrink: 0; border: 1px solid var(--border);" />
+        <div style="min-width: 0;">
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <h3 style="font-family: ui-monospace, monospace; font-size: 0.875rem; font-weight: 500; color: var(--text); margin: 0;">百花同行</h3>
+            <span style="border-radius: 9999px; border: 1px solid rgba(249,115,22,0.25); background: rgba(249,115,22,0.06); padding: 0.125rem 0.375rem; font-family: ui-monospace, monospace; font-size: 0.5625rem; color: #f97316; line-height: 1;">live</span>
+          </div>
+          <p style="margin-top: 0.25rem; font-size: 0.75rem; color: var(--text2);">一款为 BUCT 同学设计的拼车小程序。</p>
+        </div>
+      </div>
+    </div>
+    </a>
+  </section>
+
+  <section class="section fade-in-section">
+    <div class="section-header">
+      <span class="section-dot"></span>
+      <h2 class="section-title">博客</h2>
+      <a href="/blog" class="section-link">查看全部 &rarr;</a>
+    </div>
+    <div class="empty-state">
+      <p>还没有文章。</p>
+    </div>
+  </section>
+</BaseLayout>

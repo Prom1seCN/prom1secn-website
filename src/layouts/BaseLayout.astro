@@ -1,0 +1,91 @@
+---
+import { translations, type Lang } from '../i18n/translations';
+import ThemeToggle from '../components/ThemeToggle';
+import CursorGlow from '../components/CursorGlow';
+import SearchBox from '../components/SearchBox';
+import '../styles/global.css';
+
+interface Props {
+  lang: Lang;
+  title?: string;
+  description?: string;
+}
+
+const { lang, title, description } = Astro.props;
+const t = (lang: Lang) => translations[lang];
+const currentPage = Astro.url.pathname.replace(/\/$/, '') || '/';
+---
+
+<!doctype html>
+<html lang={lang} class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous" />
+    <title>{title ? `${title} — PROM1SE` : 'PROM1SE'}</title>
+    <meta name="description" content={description || 'Independent developer, creator, fitness enthusiast. Building in public.'} />
+    <script is:inline>
+      (function() {
+        const theme = localStorage.getItem('theme');
+        if (theme === 'light') {
+          document.documentElement.classList.remove('dark');
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <CursorGlow client:load />
+
+    <header>
+      <nav>
+        <SearchBox client:load />
+        <div class="nav-links">
+          {
+            [
+              { href: '/', key: 'home' as const },
+              { href: '/projects', key: 'projects' as const },
+              { href: '/blog', key: 'blog' as const },
+              { href: '/about', key: 'about' as const },
+            ].map(({ href, key }) => {
+              const fullHref = lang === 'en' ? `/en${href}` : href;
+              const isActive = currentPage === fullHref || (href !== '/' && currentPage.startsWith(fullHref));
+              return (
+                <a
+                  href={fullHref}
+                  class={`nav-link ${isActive ? 'active' : ''}`}
+                >
+                  {t(lang).nav[key]}
+                </a>
+              );
+            })
+          }
+          <div class="nav-actions">
+            <a
+              href={lang === 'zh' ? `/en${currentPage}` : currentPage.replace('/en', '') || '/'}
+              class="nav-link"
+            >
+              {t(lang).lang.toggle}
+            </a>
+            <span class="nav-divider">|</span>
+            <ThemeToggle client:load />
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer>
+      <div class="footer-row">
+        <span>&copy; {new Date().getFullYear()} {t(lang).footer.copyright}</span>
+        <span>{t(lang).footer.builtWith}</span>
+      </div>
+      <div class="footer-beian">
+        <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">浙ICP备2026023301号</a>
+      </div>
+    </footer>
+  </body>
+</html>
