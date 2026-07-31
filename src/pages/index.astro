@@ -1,7 +1,47 @@
 ---
+import { readFileSync, readdirSync, statSync } from 'fs';
+import { join, basename } from 'path';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SocialIcons from '../components/SocialIcons';
 import ScrollReveal from '../components/ScrollReveal';
+
+const NOTES_DIR = process.env.NOTES_DIR || (process.env.USERNAME ? 'D:/note/PROM1SE' : '/note/webdav/data/PROM1SE');
+
+function parseFrontmatter(raw: string): Record<string, any> {
+  const parts = raw.split('---');
+  if (parts.length < 2) return {};
+  const data: Record<string, any> = {};
+  for (const line of parts[1].split('\n')) {
+    const i = line.indexOf(':');
+    if (i > 0) {
+      data[line.slice(0, i).trim()] = line.slice(i + 1).trim();
+    }
+  }
+  if (data.publish === 'true') data.publish = true;
+  return data;
+}
+
+const recentArticles: { slug: string; title: string; date: string }[] = [];
+
+function walkDir(dir: string) {
+  try {
+    for (const entry of readdirSync(dir)) {
+      const full = join(dir, entry);
+      try {
+        if (statSync(full).isDirectory() && !entry.startsWith('.')) walkDir(full);
+        else if (entry.endsWith('.md')) {
+          const data = parseFrontmatter(readFileSync(full, 'utf-8'));
+          if (data.publish === true && data.title && data.date) {
+            recentArticles.push({ slug: basename(entry, '.md'), title: data.title, date: data.date });
+          }
+        }
+      } catch {}
+    }
+  } catch {}
+}
+
+walkDir(NOTES_DIR);
+recentArticles.sort((a, b) => b.date.localeCompare(a.date));
 ---
 
 <BaseLayout lang="zh" title="PROM1SE">
@@ -48,8 +88,15 @@ import ScrollReveal from '../components/ScrollReveal';
       <h2 class="section-title">博客</h2>
       <a href="/blog" class="section-link">查看全部 &rarr;</a>
     </div>
-    <div class="empty-state">
-      <p>还没有文章。</p>
-    </div>
+    {recentArticles.length === 0 ? (
+      <div class="empty-state"><p>还没有文章。</p></div>
+    ) : (
+      recentArticles.slice(0, 3).map(a => (
+        <a href={`/blog/${a.slug}`} style="text-decoration: none; display: block; border: 1px solid var(--border); border-radius: 0.75rem; padding: 1rem; margin-top: 0.75rem; transition: border-color 0.2s, box-shadow 0.3s;" onmouseover="this.style.borderColor='#f97316'; this.style.boxShadow='0 2px 12px rgba(249,115,22,0.06)'" onmouseout="this.style.borderColor='var(--border)'; this.style.boxShadow='none'">
+          <time style="font-family: ui-monospace, monospace; font-size: 0.6875rem; color: var(--text2);">{a.date}</time>
+          <h3 style="margin-top: 0.25rem; font-family: ui-monospace, monospace; font-size: 0.875rem; font-weight: 500; color: var(--text);">{a.title}</h3>
+        </a>
+      ))
+    )}
   </section>
 </BaseLayout>
