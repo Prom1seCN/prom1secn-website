@@ -23,7 +23,7 @@ const currentPage = Astro.url.pathname.replace(/\/$/, '') || '/';
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous" />
-    <title>{title ? `${title} — PROM1SE` : 'PROM1SE'}</title>
+    <title>{title && title !== 'Prom1seCN' ? `${title} — Prom1seCN` : 'Prom1seCN'}</title>
     <meta name="description" content={description || 'Independent developer, creator, fitness enthusiast. Building in public.'} />
     <script is:inline>
       (function() {
