@@ -5,6 +5,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import SocialIcons from '../components/SocialIcons';
 import ScrollReveal from '../components/ScrollReveal';
 
+export const prerender = false;
+
 const NOTES_DIR = process.env.NOTES_DIR || (process.env.USERNAME ? 'D:/note/PROM1SE' : '/note/webdav/data/PROM1SE');
 
 function parseFrontmatter(raw: string): Record<string, any> {
