@@ -23,21 +23,19 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Deploy to server
+      - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_ed25519
+          cat > ~/.ssh/id_ed25519 << 'KEYEOF'
+          ${{ secrets.SSH_KEY }}
+          KEYEOF
           chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Deploy to server
+        run: |
           rsync -avz --delete dist/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/ubuntu/prom1secn/dist/
 
       - name: Restart service
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          script: |
-            cd /home/ubuntu/prom1secn
-            npm install --production
-            pm2 restart prom1se
+        run: |
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'cd /home/ubuntu/prom1secn && npm install --production && pm2 restart prom1se'
