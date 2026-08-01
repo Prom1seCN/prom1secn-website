@@ -43,11 +43,14 @@ function tagStyle(tag: string) {
 try {
   for (const entry of readdirSync(PROJ_DIR)) {
     if (!entry.endsWith('.md')) continue;
-    const data = parseFrontmatter(readFileSync(join(PROJ_DIR, entry), 'utf-8'));
+    const raw = readFileSync(join(PROJ_DIR, entry), 'utf-8');
+    const data = parseFrontmatter(raw);
     if (data.publish === true && data.title) {
       const base = basename(entry, '.md');
+      const body = raw.split('---').slice(2).join('---').trim();
+      const desc = body.split('\n').filter((l: string) => l.trim())[0] || '';
       recentProjects.push({
-        title: data.title, desc: data.description || '', tech: data.tech || [],
+        title: data.title, desc, tech: data.tech || [],
         link: data.link || '#', icon: `/notes/项目/${base}.png`, order: data.order || 99,
       });
     }
@@ -85,7 +88,7 @@ recentProjects.sort((a, b) => (a.order ?? 99) - (b.order ?? 99));
           <img src={p.icon} alt={p.title} style="width: 40px; height: 40px; border-radius: 0.5rem; object-fit: cover; flex-shrink: 0; border: 1px solid var(--border);" />
           <div style="min-width: 0;">
             <div style="display: flex; align-items: center; gap: 0.5rem;">
-              <h3 style="font-family: ui-monospace, monospace; font-size: 0.875rem; font-weight: 500; color: var(--text); margin: 0;">{p.title}</h3>
+              <h3 style="font-family:'Noto Sans SC',sans-serif;font-size: 0.875rem; font-weight: 700; color: var(--text); margin: 0;">{p.title}</h3>
               <span style="border-radius: 9999px; border: 1px solid rgba(249,115,22,0.25); background: rgba(249,115,22,0.06); padding: 0.125rem 0.375rem; font-family: ui-monospace, monospace; font-size: 0.5625rem; color: #f97316; line-height: 1;">live</span>
             </div>
             <p style="margin-top: 0.25rem; font-size: 0.75rem; color: var(--text2);">{p.desc}</p>
@@ -108,7 +111,7 @@ recentProjects.sort((a, b) => (a.order ?? 99) - (b.order ?? 99));
       recentArticles.slice(0, 3).map(a => (
         <a href={`/blog/${a.slug}`} style="text-decoration: none; display: block; border: 1px solid var(--border); border-radius: 0.75rem; padding: 1rem; margin-top: 0.75rem; transition: border-color 0.2s, box-shadow 0.3s;" onmouseover="this.style.borderColor='#f97316'; this.style.boxShadow='0 2px 12px rgba(249,115,22,0.06)'" onmouseout="this.style.borderColor='var(--border)'; this.style.boxShadow='none'">
           <time style="font-family: ui-monospace, monospace; font-size: 0.6875rem; color: var(--text2);">{a.date}</time>
-          <h3 style="margin-top: 0.25rem; font-family: ui-monospace, monospace; font-size: 0.875rem; font-weight: 500; color: var(--text);">{a.title}</h3>
+          <h3 style="margin-top: 0.25rem; font-family:'Noto Sans SC',sans-serif; font-size: 0.875rem; font-weight: 700; color: var(--text);">{a.title}</h3>
         </a>
       ))
     )}
