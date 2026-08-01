@@ -4,24 +4,11 @@ import { join, basename } from 'path';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SocialIcons from '../components/SocialIcons';
 import ScrollReveal from '../components/ScrollReveal';
+import { parseFrontmatter } from '../lib/frontmatter';
 
 export const prerender = false;
 
 const NOTES_DIR = process.env.NOTES_DIR || (process.env.USERNAME ? 'D:/note/PROM1SE' : '/note/webdav/data/PROM1SE');
-
-function parseFrontmatter(raw: string): Record<string, any> {
-  const parts = raw.split('---');
-  if (parts.length < 2) return {};
-  const data: Record<string, any> = {};
-  for (const line of parts[1].split('\n')) {
-    const i = line.indexOf(':');
-    if (i > 0) {
-      data[line.slice(0, i).trim()] = line.slice(i + 1).trim();
-    }
-  }
-  if (data.publish === 'true') data.publish = true;
-  return data;
-}
 
 const recentArticles: { slug: string; title: string; date: string }[] = [];
 
