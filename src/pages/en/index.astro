@@ -4,7 +4,8 @@ import { join, basename } from 'path';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import BorderGlow from '../../components/BorderGlow';
 import ArticleCard from '../../components/ArticleCard.astro';
-import SocialIcons from '../../components/SocialIcons';
+import HomeTagline from '../../components/HomeTagline';
+import ParticleImage from '../../components/ParticleImage';
 import ScrollReveal from '../../components/ScrollReveal';
 import { parseFrontmatter } from '../../lib/frontmatter';
 
@@ -48,20 +49,27 @@ try {
   }
 } catch {}
 recentProjects.sort((a, b) => (a.order ?? 99) - (b.order ?? 99));
+
+// Read homepage taglines from local file (English version)
+const taglines: string[] = [];
+try {
+  const raw = readFileSync(join(NOTES_DIR, '首页标语-en.md'), 'utf-8');
+  for (const line of raw.split('\n')) {
+    const t = line.trim();
+    if (t && !t.startsWith('---')) taglines.push(t);
+  }
+} catch {}
 ---
 
 <BaseLayout lang="en" title="Prom1seCN">
   <ScrollReveal client:load />
 
   <section class="hero fade-in-section">
-    <p class="hero-greeting">Hi, I'm</p>
-    <img src="/logo.png" alt="Prom1seCN" class="hero-logo" />
-    <p class="hero-tagline">Maximize life experiences</p>
-    <p class="hero-identities">Indie Dev · Creator · Fitness</p>
-
-    <div class="hero-social">
-      <SocialIcons client:load />
+    <p class="hero-greeting">Welcome to</p>
+    <div style="width: min(520px, 80%); margin: 0.5rem auto 0; height: 146px; position: relative; margin-top: -12px;">
+      <ParticleImage client:load particleCount={150} particleSize={4} />
     </div>
+    <HomeTagline client:load lines={taglines} />
   </section>
 
   <hr class="divider" />
