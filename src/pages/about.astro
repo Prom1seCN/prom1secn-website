@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SocialIcons from '../components/SocialIcons';
+import ParticleImage from '../components/ParticleImage';
 import ScrollReveal from '../components/ScrollReveal';
 ---
 
@@ -11,9 +12,11 @@ import ScrollReveal from '../components/ScrollReveal';
     <h1 class="page-title">关于</h1>
 
     <div style="margin-top: 2rem; max-width: 32rem; line-height: 2.2;">
-      <p style="font-family: ui-monospace, monospace; font-size: 1.25rem; font-weight: 500; color: var(--text);">
-        Prom1seCN
-      </p>
+      <div style="width: 260px; height: 74px; margin-bottom: 0.75rem; position: relative;">
+        <div style="position: absolute; top: -36px; left: 0; right: 0; bottom: 0;">
+          <ParticleImage client:load particleCount={150} particleSize={4} />
+        </div>
+      </div>
       <p class="hero-tagline" style="font-family:'Noto Sans SC',sans-serif; font-size:1rem; font-weight:700; color:var(--text2); margin-top:0.25rem; margin-bottom:0.5rem;">生活的意义在于最大化体验</p>
       <p style="font-family: ui-monospace, monospace; font-size: 0.875rem; color: var(--text2);">
         独立开发 · 自媒体 · 健身
