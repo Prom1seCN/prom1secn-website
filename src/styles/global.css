@@ -347,7 +347,6 @@ footer {
 
 /* Hero section */
 .hero {
-  text-align: center;
   padding-top: 3rem;
   padding-bottom: 1rem;
 }
@@ -484,6 +483,15 @@ footer {
   border-radius: 0.5rem;
   padding: 2rem 1.25rem;
   text-align: center;
+}
+
+.tag-badge {
+  transition: all 0.2s ease;
+}
+.tag-badge:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px currentColor;
+  opacity: 0.85;
 }
 
 .empty-state p {
