@@ -1,0 +1,19 @@
+---
+import ParticleImage from './ParticleImage';
+import HomeTagline from './HomeTagline';
+
+interface Props {
+  greeting: string;
+  lines: string[];
+}
+
+const { greeting, lines } = Astro.props;
+---
+
+<section class="hero fade-in-section">
+  <p class="hero-greeting">{greeting}</p>
+  <div style="width: min(520px, 80%); margin: 0.5rem auto 0; height: 146px; position: relative; margin-top: -12px;">
+    <ParticleImage client:load particleCount={150} particleSize={4} />
+  </div>
+  <HomeTagline client:load lines={lines} />
+</section>

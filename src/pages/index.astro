@@ -4,8 +4,7 @@ import { join, basename } from 'path';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import BorderGlow from '../components/BorderGlow';
 import ArticleCard from '../components/ArticleCard.astro';
-import HomeTagline from '../components/HomeTagline';
-import ParticleImage from '../components/ParticleImage';
+import HeroHeader from '../components/HeroHeader.astro';
 import ScrollReveal from '../components/ScrollReveal';
 import { parseFrontmatter } from '../lib/frontmatter';
 import { tagStyle } from '../lib/tagStyle';
@@ -71,14 +70,7 @@ try {
 <BaseLayout lang="zh" title="Prom1seCN">
   <ScrollReveal client:load />
 
-  <section class="hero fade-in-section">
-    <p class="hero-greeting">Welcome to</p>
-    <div style="width: min(520px, 80%); margin: 0.5rem auto 0; height: 146px; position: relative; margin-top: -12px;">
-      <ParticleImage client:load particleCount={150} particleSize={4} />
-    </div>
-    <HomeTagline client:load lines={taglines} />
-
-  </section>
+  <HeroHeader greeting="Welcome to" lines={taglines} />
 
   <hr class="divider" />
 
