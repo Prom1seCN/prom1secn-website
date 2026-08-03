@@ -3,6 +3,7 @@ import { readFileSync, readdirSync, statSync } from 'fs';
 import { join, basename } from 'path';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import BorderGlow from '../components/BorderGlow';
+import ArticleCard from '../components/ArticleCard.astro';
 import HomeTagline from '../components/HomeTagline';
 import ParticleImage from '../components/ParticleImage';
 import ScrollReveal from '../components/ScrollReveal';
@@ -115,26 +116,7 @@ try {
       <div class="empty-state"><p>还没有文章。</p></div>
     ) : (
       recentArticles.slice(0, 3).map(a => (
-        <a href={`/blog/${a.slug}`} style="text-decoration: none; display: block; margin-top: 0.75rem;">
-          <BorderGlow client:load borderRadius={12} backgroundColor="var(--bg)" glowIntensity={0.4} coneSpread={30}>
-            <div style="padding: 1rem;">
-              <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 0.75rem;">
-                <h3 style="margin: 0; font-family:'Noto Sans SC',sans-serif; font-size: 0.875rem; font-weight: 700; color: var(--text);">{a.title}</h3>
-                <time style="flex-shrink: 0; font-family: ui-monospace, monospace; font-size: 0.6875rem; color: var(--text2);">{a.date}</time>
-              </div>
-              {a.tags.length > 0 && (
-                <div style="display: flex; flex-wrap: wrap; gap: 0.375rem; margin-top: 0.5rem;">
-                  {a.tags.map(tag => {
-                    const c = tagStyle(tag);
-                    return (
-                      <span class="tag-badge" style={`border-radius:0.25rem;border:1px solid ${c.border};background:${c.bg};padding:0.125rem 0.4375rem;font-family:ui-monospace,monospace;font-size:0.625rem;color:${c.text};letter-spacing:0.02em;cursor:default`}>{tag}</span>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-          </BorderGlow>
-        </a>
+        <ArticleCard slug={a.slug} title={a.title} date={a.date} tags={a.tags} />
       ))
     )}
   </section>

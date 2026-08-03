@@ -3,6 +3,7 @@ import { readFileSync, readdirSync, statSync } from 'fs';
 import { join, basename } from 'path';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import BorderGlow from '../../components/BorderGlow';
+import ArticleCard from '../../components/ArticleCard.astro';
 import SocialIcons from '../../components/SocialIcons';
 import ScrollReveal from '../../components/ScrollReveal';
 import { parseFrontmatter } from '../../lib/frontmatter';
@@ -11,7 +12,7 @@ export const prerender = false;
 
 const NOTES_DIR = process.env.NOTES_DIR || (process.env.USERNAME ? 'D:/note/PROM1SE' : '/note/webdav/data/PROM1SE');
 
-const recentArticles: { slug: string; title: string; date: string }[] = [];
+const recentArticles: { slug: string; title: string; date: string; tags: string[] }[] = [];
 function walkDir(dir: string) {
   try {
     for (const entry of readdirSync(dir)) {
@@ -21,7 +22,7 @@ function walkDir(dir: string) {
         else if (entry.endsWith('.md')) {
           const data = parseFrontmatter(readFileSync(full, 'utf-8'));
           if (data.publish === true && data.title && data.date) {
-            recentArticles.push({ slug: basename(entry, '.md'), title: data.title, date: data.date });
+            recentArticles.push({ slug: basename(entry, '.md'), title: data.title, date: data.date, tags: data.tags || [] });
           }
         }
       } catch {}
@@ -33,7 +34,6 @@ recentArticles.sort((a, b) => b.date.localeCompare(a.date));
 
 const PROJ_DIR = join(NOTES_DIR, '项目');
 const recentProjects: { title: string; desc: string; tech: string[]; link: string; icon: string; order: number }[] = [];
-const palette = ['#f97316','#22c55e','#3b82f6','#a855f7','#f43f5e','#14b8a6','#eab308','#ec4899'];
 try {
   for (const entry of readdirSync(PROJ_DIR)) {
     if (!entry.endsWith('.md')) continue;
@@ -100,14 +100,7 @@ recentProjects.sort((a, b) => (a.order ?? 99) - (b.order ?? 99));
       <div class="empty-state"><p>No posts yet.</p></div>
     ) : (
       recentArticles.slice(0, 3).map(a => (
-        <a href={`/blog/${a.slug}`} style="text-decoration: none; display: block; margin-top: 0.75rem;">
-          <BorderGlow client:load borderRadius={12} backgroundColor="var(--bg)" glowIntensity={0.4} coneSpread={30}>
-            <div style="padding: 1rem;">
-              <time style="font-family: ui-monospace, monospace; font-size: 0.6875rem; color: var(--text2);">{a.date}</time>
-              <h3 style="margin-top: 0.25rem; font-family:'Noto Sans SC',sans-serif; font-size: 0.875rem; font-weight: 700; color: var(--text);">{a.title}</h3>
-            </div>
-          </BorderGlow>
-        </a>
+        <ArticleCard slug={a.slug} title={a.title} date={a.date} tags={a.tags} />
       ))
     )}
   </section>
