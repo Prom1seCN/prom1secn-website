@@ -364,6 +364,7 @@ footer {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   animation: greeting-flow 4s linear infinite;
+  text-align: left;
 }
 
 @keyframes greeting-flow {
