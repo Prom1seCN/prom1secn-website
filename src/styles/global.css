@@ -347,8 +347,9 @@ footer {
 
 /* Hero section */
 .hero {
+  text-align: center;
   padding-top: 3rem;
-  padding-bottom: 2rem;
+  padding-bottom: 1rem;
 }
 
 .hero-greeting {
@@ -524,5 +525,6 @@ footer {
 .divider {
   border: none;
   border-top: 1px solid var(--border);
-  margin: 0;
+  margin: 0 auto;
+  max-width: 40rem;
 }

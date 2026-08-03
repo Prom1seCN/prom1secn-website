@@ -1,10 +1,11 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 
 interface HomeTaglineProps {
   lines: string[];
+  autoInterval?: number; // ms，默认 3000
 }
 
-export default function HomeTagline({ lines }: HomeTaglineProps) {
+export default function HomeTagline({ lines, autoInterval = 3000 }: HomeTaglineProps) {
   const [idx, setIdx] = useState(() => Math.floor(Math.random() * lines.length));
   const [tick, setTick] = useState(0);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -20,11 +21,14 @@ export default function HomeTagline({ lines }: HomeTaglineProps) {
       return n;
     });
     setTick((t) => t + 1);
-    if (timerRef.current) clearTimeout(timerRef.current);
-    timerRef.current = setTimeout(() => {
-      if (timerRef.current) clearTimeout(timerRef.current);
-    }, 3000);
   }, [lines.length]);
+
+  // 每 3s 自动切换
+  useEffect(() => {
+    if (lines.length <= 1) return;
+    const iv = setInterval(next, autoInterval);
+    return () => clearInterval(iv);
+  }, [next, autoInterval, lines.length]);
 
   if (lines.length === 0) return null;
 
@@ -55,13 +59,26 @@ export default function HomeTagline({ lines }: HomeTaglineProps) {
           fontWeight: 500,
           color: 'var(--text2)',
           letterSpacing: '0.06em',
-          margin: '2rem auto 0',
+          margin: '2.75rem auto 0.25rem',
           textAlign: 'center',
           animation: 'tagline-in 0.4s ease-out',
         }}
       >
         {lines[idx]}
       </p>
+      <span
+        style={{
+          display: 'block',
+          marginTop: '0.25rem',
+          fontSize: '0.6875rem',
+          color: 'var(--text3, rgba(148,163,184,0.45))',
+          letterSpacing: '0.1em',
+          textAlign: 'center',
+          animation: 'tagline-in 0.4s ease-out 0.15s both',
+        }}
+      >
+        点击刷新
+      </span>
     </button>
   );
 }
