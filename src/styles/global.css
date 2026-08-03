@@ -352,9 +352,34 @@ footer {
 }
 
 .hero-greeting {
-  font-family: ui-monospace, monospace;
-  font-size: 0.875rem;
-  color: #f97316;
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-indent: 0.2em;
+  background: linear-gradient(90deg, #f97316 0%, #fb923c 50%, #f97316 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: greeting-flow 4s linear infinite;
+}
+
+@keyframes greeting-flow {
+  to {
+    background-position: 200% center;
+  }
+}
+
+@keyframes tagline-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .hero-logo {
