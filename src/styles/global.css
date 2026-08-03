@@ -27,9 +27,19 @@ body {
   color: var(--text);
   font-family: 'Noto Sans SC', 'SimHei', '黑体', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
   transition: background-color 0.3s ease, color 0.3s ease;
-  background-image: radial-gradient(circle, var(--border) 0.5px, transparent 0.5px);
-  background-size: 24px 24px;
-  min-height: 100vh;
+}
+
+.bg-starfield {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.55;
+}
+
+.page-surface {
+  position: relative;
+  z-index: 1;
 }
 
 ::selection {
