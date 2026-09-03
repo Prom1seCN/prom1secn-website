@@ -39,6 +39,15 @@ if (filePath) {
   if (data.publish === true) {
     let body = raw.split('---').slice(2).join('---').trim();
     body = body.replace(/\n{3,}/g, '\n\n<br class="spacer">\n');
+    // Obsidian 双链 → 站内链接：[[文件名]] / [[文件名|别名]] / [[文件名#标题]]
+    // 目标统一取文件名（站点按 basename 全局查找，[[项目/百花同行]] → /blog/百花同行）
+    body = body.replace(/\[\[([^\]]+)\]\]/g, (_m: string, inner: string) => {
+      const [rawTarget, alias] = inner.split('|');
+      const target = rawTarget.split('#')[0].trim().replace(/\.md$/, '').split('/').pop() || '';
+      if (!target) return inner;
+      const label = (alias || rawTarget).split('#')[0].trim().split('/').pop() || target;
+      return `[${label}](/blog/${target})`;
+    });
     result.title = data.title || slug;
     result.date = data.date || '';
     marked.setOptions({ breaks: true });
@@ -64,6 +73,38 @@ if (filePath) {
         .article-body { font-size: 0.875rem; line-height: 1.85; color: var(--text2); }
         .article-body p { margin-bottom: 1.25rem; }
         .article-body br.spacer { content: ''; display: block; margin: 1rem 0; }
+
+        /* 标题（Tailwind preflight 会重置，这里按 Obsidian 层级补回） */
+        .article-body h1 { font-size: 1.6rem; font-weight: 700; color: var(--text); margin: 2.25rem 0 0.75rem; letter-spacing: -0.01em; line-height: 1.4; }
+        .article-body h2 { font-size: 1.35rem; font-weight: 700; color: var(--text); margin: 2rem 0 0.75rem; line-height: 1.4; }
+        .article-body h3 { font-size: 1.125rem; font-weight: 700; color: var(--text); margin: 1.6rem 0 0.5rem; line-height: 1.4; }
+        .article-body h4, .article-body h5, .article-body h6 { font-size: 1rem; font-weight: 700; color: var(--text); margin: 1.4rem 0 0.5rem; }
+
+        /* 链接：橙色下划线（含 Obsidian 双链转换后的站内链接） */
+        .article-body a { color: #f97316; text-decoration: underline; text-decoration-color: rgba(249,115,22,0.4); text-underline-offset: 3px; transition: text-decoration-color 0.2s, color 0.2s; }
+        .article-body a:hover { text-decoration-color: #f97316; }
+
+        /* 列表 */
+        .article-body ul { list-style: disc; padding-left: 1.5rem; margin: 0 0 1.25rem; }
+        .article-body ol { list-style: decimal; padding-left: 1.5rem; margin: 0 0 1.25rem; }
+        .article-body li { margin: 0.25rem 0; }
+
+        /* 行内代码 / 代码块 */
+        .article-body code { font-family: ui-monospace, monospace; font-size: 0.8125rem; background: rgba(249,115,22,0.07); border: 1px solid rgba(249,115,22,0.18); border-radius: 0.25rem; padding: 0.08rem 0.35rem; color: var(--text); }
+        .article-body pre { background: rgba(0,0,0,0.25); border: 1px solid var(--border); border-radius: 0.5rem; padding: 1rem 1.125rem; overflow-x: auto; margin: 0 0 1.25rem; }
+        .article-body pre code { background: none; border: none; padding: 0; color: var(--text2); font-size: 0.8125rem; }
+
+        /* 引用 / 分割线 / 图片 / 强调 */
+        .article-body blockquote { border-left: 3px solid #f97316; padding: 0.15rem 0 0.15rem 1rem; margin: 0 0 1.25rem; color: var(--text2); }
+        .article-body blockquote p { margin-bottom: 0.5rem; }
+        .article-body hr { border: none; border-top: 1px solid var(--border); margin: 2.25rem 0; }
+        .article-body img { max-width: 100%; border-radius: 0.5rem; margin: 0.5rem 0; }
+        .article-body strong { color: var(--text); font-weight: 700; }
+
+        /* 表格 */
+        .article-body table { width: 100%; border-collapse: collapse; margin: 0 0 1.25rem; font-size: 0.8125rem; }
+        .article-body th, .article-body td { border: 1px solid var(--border); padding: 0.5rem 0.75rem; text-align: left; }
+        .article-body th { color: var(--text); font-weight: 700; background: rgba(249,115,22,0.05); }
       </style>
       <div class="article-body" style="margin-top: 2rem;" set:html={result.html} />
 
