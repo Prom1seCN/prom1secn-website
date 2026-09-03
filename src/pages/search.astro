@@ -2,6 +2,7 @@
 import { readFileSync, readdirSync, statSync } from 'fs';
 import { join, basename } from 'path';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { parseFrontmatter } from '../lib/frontmatter';
 
 export const prerender = false;
 
@@ -12,29 +13,23 @@ interface Result { title: string; url: string; type: 'blog' | 'project'; }
 
 const results: Result[] = [];
 
-// Search projects
-const projects = [
-  { title: '百花同行', url: '/projects' },
-];
+// Search projects (scan 项目/ directory, same source as /projects page)
+const projects: { title: string }[] = [];
+try {
+  const PROJ_DIR = join(NOTES_DIR, '项目');
+  for (const entry of readdirSync(PROJ_DIR)) {
+    if (!entry.endsWith('.md')) continue;
+    const data = parseFrontmatter(readFileSync(join(PROJ_DIR, entry), 'utf-8'));
+    if (data.publish === true && data.title) projects.push({ title: data.title });
+  }
+} catch {}
 for (const p of projects) {
-  if (p.title.toLowerCase().includes(query) || '拼车 小程序 BUCT'.toLowerCase().includes(query)) {
-    results.push({ title: p.title, url: p.url, type: 'project' });
+  if (p.title.toLowerCase().includes(query)) {
+    results.push({ title: p.title, url: '/projects', type: 'project' });
   }
 }
 
 // Search blog
-function parseFrontmatter(raw: string): Record<string, any> {
-  const parts = raw.split('---');
-  if (parts.length < 2) return {};
-  const data: Record<string, any> = {};
-  for (const line of parts[1].split('\n')) {
-    const i = line.indexOf(':');
-    if (i > 0) data[line.slice(0, i).trim()] = line.slice(i + 1).trim();
-  }
-  if (data.publish === 'true') data.publish = true;
-  return data;
-}
-
 function walkDir(dir: string) {
   try {
     for (const entry of readdirSync(dir)) {
@@ -42,9 +37,9 @@ function walkDir(dir: string) {
       try {
         if (statSync(full).isDirectory() && !entry.startsWith('.')) walkDir(full);
         else if (entry.endsWith('.md')) {
-          const data = parseFrontmatter(readFileSync(full, 'utf-8'));
+          const raw = readFileSync(full, 'utf-8');
+          const data = parseFrontmatter(raw);
           if (data.publish === true && data.title) {
-            const raw = readFileSync(full, 'utf-8');
             const body = raw.split('---').slice(2).join('---').toLowerCase();
             if (data.title.toLowerCase().includes(query) || body.includes(query)) {
               results.push({
